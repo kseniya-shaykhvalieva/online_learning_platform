@@ -1,9 +1,8 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 
 
-class CustomUser(AbstractUser):
-    username = None
+class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True, verbose_name="Email")
 
     phone = models.CharField(max_length=16, verbose_name="Номер телефона", blank=True, null=True)
