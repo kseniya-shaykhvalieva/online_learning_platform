@@ -4,6 +4,12 @@ from rest_framework.serializers import ModelSerializer
 from materials.models import Course, Lesson
 
 
+class LessonSerializer(ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+
+
 class CourseSerializer(ModelSerializer):
     class Meta:
         model = Course
@@ -12,18 +18,11 @@ class CourseSerializer(ModelSerializer):
 
 class CourseDetailSerializer(ModelSerializer):
     lessons_count = SerializerMethodField()
+    lessons_list = LessonSerializer(many=True)
 
     def get_lessons_count(self, obj):
-        if obj.lessons.all():
-            return obj.lessons.all().count()
-        return None
+        return obj.lessons.all().count()
 
     class Meta:
         model = Course
-        fields = '__all__'
-
-
-class LessonSerializer(ModelSerializer):
-    class Meta:
-        model = Lesson
         fields = '__all__'
