@@ -44,3 +44,10 @@ class Payment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, verbose_name="Оплаченный курс", blank=True, null=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.DO_NOTHING, verbose_name="Оплаченный урок", blank=True, null=True)
     pay_method = models.CharField(max_length=10, choices=PAY_METHOD_CHOICES, default=CASH, verbose_name="Способ оплаты")
+
+    def __str__(self):
+        return f"{self.user.email}"
+
+    class Meta:
+        verbose_name = "Платёж"
+        verbose_name_plural = "Платежи"
