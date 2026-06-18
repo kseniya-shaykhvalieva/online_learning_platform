@@ -12,4 +12,5 @@ class PaymentSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        exclude  = ('password',)
+
