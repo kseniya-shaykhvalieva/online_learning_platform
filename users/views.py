@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
@@ -35,3 +35,22 @@ class UserCreateAPIView(CreateAPIView):
         user = serializer.save()
         user.set_password(user.password)
         user.save()
+
+
+class UserListAPIView(ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserRetrieveAPIView(RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserUpdateAPIView(UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDestroyAPIView(DestroyAPIView):
+    queryset = CustomUser.objects.all()
