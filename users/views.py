@@ -1,5 +1,7 @@
+from itertools import product
+
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
@@ -10,6 +12,7 @@ from users.forms import UserRegisterForm
 from users.models import CustomUser, Payment
 from users.permissions import IsOwner
 from users.serializers import PaymentSerializer, UserSerializer
+from users.services import create_stripe_product, create_stripe_price, create_stripe_session
 
 
 class UserCreateView(CreateView):
@@ -27,7 +30,13 @@ class PaymentViewSet(ModelViewSet):
     filterset_fields = ("course", "lesson", "pay_method",)
 
     def perform_create(self, serializer):
-        serializer.save(user = self.request.user)
+        payment = serializer.save(user = self.request.user)
+        product = create_stripe_product(payment)
+        price = create_stripe_price(payment, product)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:
@@ -35,6 +44,10 @@ class PaymentViewSet(ModelViewSet):
         elif self.action in ["update", "destroy"]:
             self.permission_classes = (IsAdminUser,)
         return super().get_permissions()
+
+
+class PaymentSuccessURLView(TemplateView):
+    template_name = "users/payment_success_url.html"
 
 
 class UserCreateAPIView(CreateAPIView):

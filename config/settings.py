@@ -117,3 +117,5 @@ AUTH_USER_MODEL = "users.CustomUser"
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/materials/home/"
 LOGOUT_REDIRECT_URL = "/users/login/"
+
+STRIPE_SECRET_KEY=os.getenv("STRIPE_SECRET_KEY")
