@@ -10,6 +10,7 @@ class Course(models.Model):
         upload_to="image_course/", verbose_name="Превью", help_text="Загрузите изображение", blank=True, null=True
     )
     description = models.TextField(verbose_name="Описание", help_text="Введите описание курса", blank=True, null=True)
+    price = models.PositiveIntegerField(default=0, verbose_name="Цена", help_text="Введите стоимость курса")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец")
 
     def __str__(self):
@@ -33,6 +34,7 @@ class Lesson(models.Model):
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс", help_text="Выберете курс",
                                related_name="lessons")
+    price = models.PositiveIntegerField(default=0, verbose_name="Цена", help_text="Введите стоимость урока")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец")
 
     def __str__(self):

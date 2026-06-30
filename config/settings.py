@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "users",
     "materials",
 ]
@@ -32,6 +33,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -115,3 +117,5 @@ AUTH_USER_MODEL = "users.CustomUser"
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/materials/home/"
 LOGOUT_REDIRECT_URL = "/users/login/"
+
+STRIPE_SECRET_KEY=os.getenv("STRIPE_SECRET_KEY")
