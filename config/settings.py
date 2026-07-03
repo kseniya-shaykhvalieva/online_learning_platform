@@ -146,3 +146,10 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULE = {
+    'block_inactive_users': {
+        'task': 'users.tasks.block_inactive_users',
+        'schedule': timedelta(days=1),
+    },
+}

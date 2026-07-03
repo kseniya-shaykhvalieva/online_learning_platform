@@ -2,7 +2,7 @@ from config.settings import DEFAULT_FROM_EMAIL
 from django.core.mail import send_mail
 from celery import shared_task
 
-from materials.models import Course, Subscription
+from materials.models import Subscription
 
 
 @shared_task
