@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from materials.models import Course, Lesson, Subscription
 from materials.paginations import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer
+from materials.tasks import mailing_for_updates
 from users.permissions import IsModer, IsOwner
 
 
@@ -31,6 +32,11 @@ class CourseViewSet(ModelViewSet):
         if self.action == "retrieve":
             return CourseDetailSerializer
         return CourseSerializer
+
+    def perform_update(self, serializer):
+        course_id = serializer.instance.pk
+        super().perform_update(serializer)
+        mailing_for_updates.delay(course_id)
 
 
 class LessonListAPIView(ListAPIView):
