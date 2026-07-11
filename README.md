@@ -62,6 +62,8 @@ online_learning_platform/
 │ ├── tests.py
 │ ├── urls.py
 │ └── views.py
+├── Dockerfile
+├── docker-compose.yml
 ├── .env
 ├── .gitignore
 ├── manage.py
@@ -104,6 +106,27 @@ celery -A config beat --loglevel=info
 7. **Запуск сервера:**
 ``` 
 python manage.py runserver
+```
+## Запуск через Docker
+
+1. **Сборка и запуск контейнеров:**
+``` 
+docker-compose up --build
+```
+
+2. **Применение миграций в контейнере:**
+``` 
+docker-compose exec web python manage.py migrate
+```
+
+3. **Создание суперпользователя:**
+``` 
+docker-compose exec web python manage.py csu
+```
+
+4. **Остановка контейнеров:**
+``` 
+docker-compose down
 ```
 
 ## Функциональности
@@ -170,3 +193,4 @@ python manage.py runserver
 - ipython 9.14.1
 - django-celery-beat 2.9.0
 - Poetry
+- Docker
