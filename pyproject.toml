@@ -50,5 +50,7 @@ disallow_untyped_defs = true
 warn_return_any = true
 exclude = "venv|__pycache__"
 
+package-mode = false
+
 [tool.poetry]
 packages = [{include = "config"}, {include = "materials"}, {include = "users"}]
