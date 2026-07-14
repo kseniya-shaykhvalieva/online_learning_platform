@@ -39,8 +39,6 @@ jobs:
         run: poetry config virtualenvs.create false
       - name: Install dependencies
         run: poetry install
-      - name: Run migrations
-        run: python manage.py migrate
       - name: Run tests
         run: python manage.py test
 
