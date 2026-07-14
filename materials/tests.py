@@ -61,6 +61,7 @@ class LessonCase(APITestCase):
                     "description": None,
                     "preview": None,
                     "url_video": None,
+                    "price": 0,
                     "course": self.course.pk,
                     "owner": self.user.pk,
                 }
