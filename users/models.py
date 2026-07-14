@@ -4,6 +4,7 @@ from django.db import models
 
 from materials.models import Course, Lesson
 
+
 class CustomUserManager(BaseUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
@@ -43,9 +44,15 @@ class Payment(models.Model):
     ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
     pay_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата оплаты")
-    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, verbose_name="Оплаченный курс", blank=True, null=True)
-    lesson = models.ForeignKey(Lesson, on_delete=models.DO_NOTHING, verbose_name="Оплаченный урок", blank=True, null=True)
-    pay_method = models.CharField(max_length=10, choices=PAY_METHOD_CHOICES, default=CASH, verbose_name="Способ оплаты")
+    course = models.ForeignKey(
+        Course, on_delete=models.DO_NOTHING, verbose_name="Оплаченный курс", blank=True, null=True
+    )
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.DO_NOTHING, verbose_name="Оплаченный урок", blank=True, null=True
+    )
+    pay_method = models.CharField(
+        max_length=10, choices=PAY_METHOD_CHOICES, default=CASH, verbose_name="Способ оплаты"
+    )
     session_id = models.CharField(max_length=500, blank=True, null=True, verbose_name="ID сессии")
     link = models.URLField(max_length=500, blank=True, null=True, verbose_name="Ссылка на оплату")
 

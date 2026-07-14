@@ -1,5 +1,5 @@
-from django.utils import timezone
 from celery import shared_task
+from django.utils import timezone
 
 from users.models import CustomUser
 
@@ -10,7 +10,7 @@ def block_inactive_users():
     users = CustomUser.objects.all()
     block_list = []
     for user in users:
-        if user.last_login and (today-user.last_login).days > 30:
+        if user.last_login and (today - user.last_login).days > 30:
             block_list.append(user)
     if block_list:
         for user in block_list:

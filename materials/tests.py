@@ -1,9 +1,9 @@
 from django.db.models.expressions import result
-from rest_framework.test import APITestCase
-from rest_framework import status
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-from materials.models import Lesson, Course, Subscription
+from materials.models import Course, Lesson, Subscription
 from users.models import CustomUser
 
 
@@ -19,58 +19,32 @@ class LessonCase(APITestCase):
         response = self.client.get(url)
         data = response.json()
 
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK
-        )
-        self.assertEqual(
-            data.get("name"), self.lesson.name
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data.get("name"), self.lesson.name)
 
     def test_lesson_create(self):
         url = reverse("materials:lesson-create")
-        data = {
-            "name":"Испанский алфавит",
-            "course":self.course.pk,
-            "owner":self.user.pk,
-            "url_video":""
-        }
+        data = {"name": "Испанский алфавит", "course": self.course.pk, "owner": self.user.pk, "url_video": ""}
         response = self.client.post(url, data)
 
-        self.assertEqual(
-            response.status_code, status.HTTP_201_CREATED
-        )
-        self.assertEqual(
-            Lesson.objects.all().count(), 2
-        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Lesson.objects.all().count(), 2)
 
     def test_lesson_update(self):
         url = reverse("materials:lesson-update", args=(self.lesson.pk,))
-        data = {
-            "name":"Испанский алфавит",
-            "course":self.course.pk,
-            "owner":self.user.pk,
-            "url_video":""
-        }
+        data = {"name": "Испанский алфавит", "course": self.course.pk, "owner": self.user.pk, "url_video": ""}
         response = self.client.patch(url, data)
         data = response.json()
 
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK
-        )
-        self.assertEqual(
-            data.get("name"), "Испанский алфавит"
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data.get("name"), "Испанский алфавит")
 
     def test_lesson_delete(self):
         url = reverse("materials:lesson-delete", args=(self.lesson.pk,))
         response = self.client.delete(url)
 
-        self.assertEqual(
-            response.status_code, status.HTTP_204_NO_CONTENT
-        )
-        self.assertEqual(
-            Lesson.objects.all().count(), 0
-        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Lesson.objects.all().count(), 0)
 
     def test_lesson_list(self):
         url = reverse("materials:lesson-list")
@@ -88,17 +62,13 @@ class LessonCase(APITestCase):
                     "preview": None,
                     "url_video": None,
                     "course": self.course.pk,
-                    "owner": self.user.pk
+                    "owner": self.user.pk,
                 }
-            ]
+            ],
         }
 
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK
-        )
-        self.assertEqual(
-            data, result
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data, result)
 
 
 class SubscriptionCase(APITestCase):
@@ -110,20 +80,12 @@ class SubscriptionCase(APITestCase):
 
     def test_is_subscribed(self):
         url = reverse("materials:subscription")
-        data = {
-            "id":self.course.pk
-        }
+        data = {"id": self.course.pk}
         response = self.client.post(url, data)
         data = response.json()
-        result = {
-            "message": "Подписка добавлена"
-        }
+        result = {"message": "Подписка добавлена"}
         # result = {
         #     "message": "Подписка удалена"
         # }
-        self.assertEqual(
-            response.status_code, status.HTTP_200_OK
-        )
-        self.assertEqual(
-            data, result
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data, result)
