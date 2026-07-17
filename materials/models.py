@@ -32,8 +32,9 @@ class Lesson(models.Model):
     url_video = models.TextField(
         verbose_name="Ссылка на видео", help_text="Вставьте ссылку на видео", blank=True, null=True
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс", help_text="Выберете курс",
-                               related_name="lessons")
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, verbose_name="Курс", help_text="Выберете курс", related_name="lessons"
+    )
     price = models.PositiveIntegerField(default=0, verbose_name="Цена", help_text="Введите стоимость урока")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец")
 
@@ -47,11 +48,12 @@ class Lesson(models.Model):
 
 class Subscription(models.Model):
     """Подписка на обновление курса"""
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
 
     def __str__(self):
-        return f'{self.course.name}'
+        return f"{self.course.name}"
 
     class Meta:
         verbose_name = "Подписка"

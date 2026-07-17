@@ -3,16 +3,16 @@ from itertools import product
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
+from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from users.forms import UserRegisterForm
 from users.models import CustomUser, Payment
 from users.permissions import IsOwner
 from users.serializers import PaymentSerializer, UserSerializer
-from users.services import create_stripe_product, create_stripe_price, create_stripe_session
+from users.services import create_stripe_price, create_stripe_product, create_stripe_session
 
 
 class UserCreateView(CreateView):
@@ -25,12 +25,19 @@ class UserCreateView(CreateView):
 class PaymentViewSet(ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+    )
     ordering_fields = ("pay_date",)
-    filterset_fields = ("course", "lesson", "pay_method",)
+    filterset_fields = (
+        "course",
+        "lesson",
+        "pay_method",
+    )
 
     def perform_create(self, serializer):
-        payment = serializer.save(user = self.request.user)
+        payment = serializer.save(user=self.request.user)
         product = create_stripe_product(payment)
         price = create_stripe_price(payment, product)
         session_id, payment_link = create_stripe_session(price)
@@ -57,7 +64,7 @@ class UserCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save()
-        user.set_password(serializer.validated_data['password'])
+        user.set_password(serializer.validated_data["password"])
         user.save()
 
 
@@ -74,9 +81,15 @@ class UserRetrieveAPIView(RetrieveAPIView):
 class UserUpdateAPIView(UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated, IsOwner,)
+    permission_classes = (
+        IsAuthenticated,
+        IsOwner,
+    )
 
 
 class UserDestroyAPIView(DestroyAPIView):
     queryset = CustomUser.objects.all()
-    permission_classes = (IsAuthenticated, IsOwner,)
+    permission_classes = (
+        IsAuthenticated,
+        IsOwner,
+    )
